@@ -1,0 +1,68 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: jx4-poi-gateway-app-dev
+  annotations:
+    argocd/app-name: jx4-poi-gateway-app-dev
+    backstage.io/kubernetes-id: jx4-poi-gateway-app
+    backstage.io/kubernetes-namespace: jx4
+    janus-idp.io/tekton-enabled : 'true'
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: rosa916-rvhvd/jx4-gateway
+  tags:
+    - java
+    - quarkus
+    - maven
+    - workshop
+  links:
+    - url: https://console-openshift-console.apps.rosa916.9nln.p1.openshiftapps.com/dev-pipelines/ns/jx4/
+      title: Pipelines
+      icon: web
+    - url: https://console-openshift-console.apps.rosa916.9nln.p1.openshiftapps.com/k8s/ns/jx4/deployments/jx4-poi-gateway-app
+      title: Deployment
+      icon: web
+    - url: https://devspaces.apps.rosa916.9nln.p1.openshiftapps.com/#https://github.com/rosa916-rvhvd/jx4-gateway?che-editor=che-incubator/che-code/latest&devfilePath=.devfile-vscode.yaml
+      title: OpenShift Dev Spaces (VS Code)
+      icon: web
+spec:
+  type: service
+  lifecycle: production
+  owner: "user:default/joshix"
+  system: workshop-system-jx4
+  providesApis:
+    - gateway-api-jx4
+  consumesApis:
+    - backend-api-jx4
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: workshop-system-jx4
+  tags:
+    - backstage
+    - janus-idp
+    - openshift
+    - workshop
+    - rh-summit
+spec:
+  owner: "user:default/joshix"
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: gateway-api-jx4
+  description: API surface exposed to interact with Backends (summit POIs + parks data) via the Gateway
+  links:
+    - url: http://jx4-poi-gateway-app-jx4.apps.rosa916.9nln.p1.openshiftapps.com/q/swagger-ui
+      title: Swagger UI
+      icon: web
+    - url: https://github.com/rosa916-rvhvd/jx4-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
+      title: API Spec
+      icon: code
+spec:
+  type: openapi
+  lifecycle: production
+  owner: "user:default/joshix"
+  system: workshop-system-jx4
+  definition:
+    $text: https://github.com/rosa916-rvhvd/jx4-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
